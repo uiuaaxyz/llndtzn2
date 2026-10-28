@@ -1,0 +1,26 @@
+# Datos generales del sitio. Se editan desde el panel (Pages CMS) en "Sitio y contacto".
+nombre: Lleno de Tizne
+autor: Uriel Moreno
+lema: Archivo y poética de la ceniza
+descripcion: Gestión cultural, edición independiente, narrativa visceral y servicios editoriales.
+ubicacion: Guadalupe, N.L., México
+
+bio: |
+  Escritor, gestor cultural y editor independiente. Mi labor se desplaza entre la materialidad de la tinta y la ceniza, coordinando colectivos, talleres literarios y publicaciones que desafían las estructuras hegemónicas.
+
+  Especializado en corrección de estilo, curaduría de catálogos y agenciamiento de voces emergentes en el ecosistema del libro.
+
+datos:
+  - etiqueta: Ubicación
+    valor: Guadalupe, N.L.
+  - etiqueta: Especialidad
+    valor: Literatura y Edición
+  - etiqueta: Colectivos
+    valor: Narrativas Ferroviarias, La Hermana de Shakespeare
+
+contacto_texto: ¿Tienes un manuscrito que necesita corrección, buscas representación literaria, o te interesa coordinar un taller? Escribe directamente al núcleo del tizne.
+correo: contacto@llenodetizne.com
+
+redes:
+  - nombre: Instagram
+    url: https://instagram.com/

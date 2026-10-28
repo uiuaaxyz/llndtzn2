@@ -1,0 +1,202 @@
+# Panel para subir contenido sin tocar código: https://app.pagescms.org
+# (entras con tu cuenta de GitHub y eliges este repositorio)
+
+media:
+  input: assets/fotos
+  output: /assets/fotos
+  categories: [image]
+  rename: safe
+
+content:
+  - name: textos
+    label: Textos del Archivo
+    type: collection
+    path: _textos
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, genero, fecha]
+      primary: titulo
+      sort: [fecha, titulo]
+      default:
+        sort: fecha
+        order: desc
+    fields:
+      - name: titulo
+        label: Título
+        type: string
+        required: true
+      - name: genero
+        label: Género
+        type: select
+        required: true
+        options:
+          values:
+            - name: poesia
+              label: Poesía
+            - name: cuento
+              label: Cuento
+            - name: cronica
+              label: Crónica
+            - name: nota
+              label: Nota Periodística
+            - name: ensayo
+              label: Ensayo Breve
+      - name: fecha
+        label: Fecha
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: poema
+        label: ¿Es poema? (respeta cada verso y lo pone en cursiva con barra)
+        type: boolean
+        default: false
+      - name: fragmento
+        label: Fragmento para el Archivo (opcional; si lo dejas vacío se toma el inicio del texto)
+        type: text
+      - name: autor
+        label: Autor (opcional; si lo dejas vacío dice Uriel Moreno)
+        type: string
+      - name: body
+        label: Texto completo
+        type: rich-text
+        options:
+          format: markdown
+          media: false
+
+  - name: galeria
+    label: Galería de fotos
+    type: collection
+    path: _galeria
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [evento, fecha, fotografo]
+      primary: evento
+      sort: [fecha, evento]
+      default:
+        sort: fecha
+        order: desc
+    fields:
+      - name: imagen
+        label: Foto
+        type: image
+        required: true
+        options:
+          extensions: [jpg, jpeg, png, webp]
+      - name: evento
+        label: Evento
+        type: string
+        required: true
+      - name: fecha
+        label: Fecha
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: fotografo
+        label: Quién tomó la foto
+        type: string
+      - name: lugar
+        label: Lugar (opcional)
+        type: string
+      - name: contexto
+        label: Contexto (opcional)
+        type: text
+
+  - name: proyectos
+    label: Proyectos y colectivos
+    type: collection
+    path: _proyectos
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, categoria, anio, orden]
+      primary: titulo
+      sort: [orden, titulo]
+      default:
+        sort: orden
+        order: asc
+    fields:
+      - name: titulo
+        label: Nombre
+        type: string
+        required: true
+      - name: categoria
+        label: Tipo (Colectivo, Publicación, Taller, Servicio...)
+        type: string
+        required: true
+      - name: anio
+        label: Año (opcional)
+        type: string
+      - name: lugar
+        label: Lugar (opcional)
+        type: string
+      - name: resumen
+        label: Resumen corto (sale en el recuadro)
+        type: text
+        required: true
+      - name: enlace
+        label: Enlace externo (opcional; Instagram, catálogo, etc.)
+        type: string
+      - name: orden
+        label: Orden en la página (1 va primero)
+        type: number
+        default: 10
+      - name: body
+        label: Detalle (sale en el pop-up)
+        type: rich-text
+        options:
+          format: markdown
+          media: false
+
+  - name: sitio
+    label: Sitio, biografía y contacto
+    type: file
+    path: _data/sitio.yml
+    format: yaml
+    fields:
+      - name: nombre
+        label: Nombre del sitio
+        type: string
+      - name: autor
+        label: Tu nombre (subtítulo de la portada)
+        type: string
+      - name: lema
+        label: Lema (línea pequeña sobre el título)
+        type: string
+      - name: descripcion
+        label: Frase de la portada
+        type: text
+      - name: ubicacion
+        label: Ubicación
+        type: string
+      - name: bio
+        label: Biografía (separa párrafos con una línea en blanco)
+        type: text
+      - name: datos
+        label: Ficha de "Sobre mí"
+        type: object
+        list: true
+        fields:
+          - name: etiqueta
+            label: Etiqueta
+            type: string
+          - name: valor
+            label: Valor
+            type: string
+      - name: contacto_texto
+        label: Texto de la sección Contacto
+        type: text
+      - name: correo
+        label: Correo
+        type: string
+      - name: redes
+        label: Redes sociales
+        type: object
+        list: true
+        fields:
+          - name: nombre
+            label: Red (Instagram, Facebook, TikTok...)
+            type: string
+          - name: url
+            label: Enlace completo (https://...)
+            type: string

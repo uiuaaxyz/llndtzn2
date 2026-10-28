@@ -1,0 +1,42 @@
+{%- assign inicio = '/' | relative_url -%}
+{%- assign s = site.data.sitio -%}
+  <footer>
+    <div class="footer-col">
+      <h4>{{ s.nombre }}</h4>
+      <p>{{ s.autor }}<br>Archivo, edición y gestión cultural desde los márgenes del norte.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="{{ inicio }}#inicio">Inicio</a></li>
+        <li><a href="{{ inicio }}#sobre-mi">Sobre mí</a></li>
+        <li><a href="{{ inicio }}#archivo">Archivo</a></li>
+        <li><a href="{{ inicio }}#galeria">Galería</a></li>
+        <li><a href="{{ inicio }}#proyectos">Proyectos</a></li>
+        <li><a href="{{ inicio }}#contacto">Contacto</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Archivo</h4>
+      <ul>
+        {%- for g in site.data.generos %}
+        <li><a href="{{ inicio }}#archivo" data-filtrar="{{ g.clave }}">{{ g.nombre }}</a></li>
+        {%- endfor %}
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        {%- if s.correo %}
+        <li><a href="mailto:{{ s.correo }}">{{ s.correo }}</a></li>
+        {%- endif %}
+        {%- for r in s.redes %}
+        <li><a href="{{ r.url }}" target="_blank" rel="noopener">{{ r.nombre }} &#8599;</a></li>
+        {%- endfor %}
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span>{{ s.nombre }} · {{ s.autor }}</span>
+      <span>&copy; {{ site.time | date: '%Y' }} · {{ s.ubicacion }}</span>
+    </div>
+  </footer>

@@ -1,0 +1,54 @@
+---
+layout: base
+---
+{%- assign genero = site.data.generos | where: 'clave', page.genero | first -%}
+{%- assign palabras = content | number_of_words -%}
+{%- assign minutos = palabras | divided_by: 200 | plus: 1 -%}
+{%- assign textos = site.textos | sort: 'fecha' | reverse -%}
+{%- for t in textos -%}
+  {%- if t.url == page.url -%}
+    {%- assign i = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign total = textos | size -%}
+{%- assign i_ant = i | minus: 1 -%}
+{%- if i_ant < 0 -%}{%- assign i_ant = total | minus: 1 -%}{%- endif -%}
+{%- assign i_sig = i | plus: 1 | modulo: total -%}
+{%- assign anterior = textos[i_ant] -%}
+{%- assign siguiente = textos[i_sig] -%}
+  <div class="barra-lectura" aria-hidden="true"></div>
+
+  <main class="lectura">
+    <article class="text-container">
+      <div class="text-header">
+        <div class="text-meta-row">
+          <span class="text-meta">{{ genero.nombre | default: page.genero }}</span>
+          <span class="tiempo-lectura">{% if page.fecha %}{{ page.fecha | date: '%d.%m.%Y' }} · {% endif %}Lectura: {{ minutos }} min</span>
+        </div>
+        <h1 class="text-title">{{ page.titulo }}</h1>
+        <span class="text-author">Por {{ page.autor | default: site.data.sitio.autor }}</span>
+      </div>
+
+      <div class="text-body">
+        {%- if page.poema %}
+        <div class="poetic-format">
+{{ content }}
+        </div>
+        {%- else %}
+{{ content }}
+        {%- endif %}
+      </div>
+
+      <div class="back-nav">
+        <a href="{{ '/' | relative_url }}#archivo" class="btn-bruto">&larr; Volver al Archivo</a>
+        <span>Archivo de Tizne // {{ genero.nombre | default: page.genero }}</span>
+      </div>
+    </article>
+    {%- if total > 1 %}
+
+    <nav class="entre-textos" aria-label="Más textos del archivo">
+      <a href="{{ anterior.url | relative_url }}"><small>&larr; Anterior</small><strong>{{ anterior.titulo }}</strong></a>
+      <a href="{{ siguiente.url | relative_url }}"><small>Siguiente &rarr;</small><strong>{{ siguiente.titulo }}</strong></a>
+    </nav>
+    {%- endif %}
+  </main>

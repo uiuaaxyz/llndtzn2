@@ -1,0 +1,209 @@
+---
+layout: base
+---
+{%- assign s = site.data.sitio -%}
+{%- assign textos = site.textos | sort: 'fecha' | reverse -%}
+{%- assign fotos = site.galeria | sort: 'fecha' | reverse -%}
+{%- assign proyectos = site.proyectos | sort: 'orden' -%}
+  <main>
+
+    <!-- PORTADA -->
+    <section id="inicio">
+      <canvas id="hollin" aria-hidden="true"></canvas>
+      <p class="hero-kicker">// {{ s.lema }} — {{ s.ubicacion }}</p>
+      <h1>Lleno de Tizne</h1>
+      <p class="hero-autor">{{ s.autor }}</p>
+      <p class="hero-sub">{{ s.descripcion }}</p>
+      <div class="cta-container">
+        <a href="#archivo" class="btn-bruto">Explorar Archivo</a>
+        <a href="#galeria" class="btn-bruto btn-bruto-alt">Ver Galería</a>
+      </div>
+      <div class="sello" aria-hidden="true"><span>{{ s.nombre }} · Archivo vivo</span><span>{{ textos.size | plus: fotos.size | prepend: '00' | slice: -3, 3 }}</span></div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <span>{% for g in site.data.generos %}{{ g.nombre }} ▪ {% endfor %}{% for p in proyectos limit: 3 %}{{ p.titulo }} ▪ {% endfor %}Todo lo sólido se desvanece en tizne ▪</span>
+    </div>
+
+    <!-- SOBRE MÍ -->
+    <section id="sobre-mi">
+      <p class="section-num">01 · Sobre mí</p>
+      <h2 class="section-title">Entre la tinta <em>y la ceniza</em></h2>
+      <div class="about-grid">
+        <div class="about-text">
+          {{ s.bio | markdownify | replace: 'estructuras hegemónicas', '<span class="tachon" title="Censurado">estructuras hegemónicas</span>' }}
+        </div>
+        <div class="about-meta">
+          <div class="meta-item"><span>NOMBRE:</span><span>{{ s.autor }}</span></div>
+          {%- for d in s.datos %}
+          <div class="meta-item"><span>{{ d.etiqueta | upcase }}:</span><span>{{ d.valor }}</span></div>
+          {%- endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHIVO DE TIZNE: se llena solo con cada entrada nueva de _textos -->
+    <section id="archivo">
+      <p class="section-num">02 · Archivo</p>
+      <h2 class="section-title">Archivo <em>de tizne</em></h2>
+      <p class="intro-line">Poesía, cuento, crónica, notas periodísticas y ensayo breve extraídos del carbón. Haz clic en cualquier título para leer el texto completo.</p>
+
+      <div class="archive-tabs-container"></div>
+
+      <div class="archive-controls">
+        <button type="button" class="filter-btn active" data-filter="all">Todos <sup>{{ textos.size }}</sup></button>
+        {%- for g in site.data.generos %}
+        {%- assign n = textos | where: 'genero', g.clave | size %}
+        <button type="button" class="filter-btn" data-filter="{{ g.clave }}">{{ g.nombre }} <sup>{{ n }}</sup></button>
+        {%- endfor %}
+      </div>
+
+      <div class="archive-list">
+        {%- for t in textos %}
+        {%- assign genero = site.data.generos | where: 'clave', t.genero | first %}
+        <article class="archive-item" data-category="{{ t.genero }}">
+          <div class="archive-header-row">
+            <span class="archive-genre">{{ genero.nombre | default: t.genero }}</span>
+            {%- if t.fecha %}<span class="archive-date">{{ t.fecha | date: '%d.%m.%Y' }}</span>{% endif %}
+          </div>
+          <h4><a href="{{ t.url | relative_url }}">{{ t.titulo }}</a></h4>
+          <div class="archive-snippet">"{{ t.fragmento | default: t.content | strip_html | normalize_whitespace | truncatewords: 22 }}"</div>
+        </article>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <!-- GALERÍA: se llena sola con cada foto nueva de _galeria -->
+    <section id="galeria">
+      <p class="section-num">03 · Galería</p>
+      <h2 class="section-title">Registros <em>de humo</em></h2>
+      <p class="intro-line">Memoria visual, fotocopias, pruebas de imprenta y registros de taller y evento. Toda imagen pasa por el carbón: se muestra en escala de grises. Toca una foto para verla completa.</p>
+
+      <div class="gallery-grid">
+        {%- for f in fotos %}
+        {%- capture folio %}{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{% endcapture %}
+        <button type="button" class="gallery-card"
+          data-foto="{% if f.imagen and f.imagen != '' %}{{ f.imagen | relative_url }}{% endif %}"
+          data-evento="{{ f.evento | escape }}"
+          data-fecha="{% if f.fecha %}{{ f.fecha | date: '%d.%m.%Y' }}{% endif %}"
+          data-fotografo="{{ f.fotografo | escape }}"
+          data-lugar="{{ f.lugar | escape }}"
+          data-contexto="{{ f.contexto | escape }}"
+          data-folio="{{ folio }}">
+          <div class="gallery-frame" data-folio="{{ folio }}">
+            {%- if f.imagen and f.imagen != '' %}
+            <img src="{{ f.imagen | relative_url }}" alt="{{ f.evento | escape }}" loading="lazy">
+            {%- else %}
+            <div class="gallery-placeholder-text">[ Registro visual {{ folio }} ]<br>Foto pendiente</div>
+            {%- endif %}
+          </div>
+          <div class="gallery-content">
+            <span class="gallery-tag">{% if f.fecha %}{{ f.fecha | date: '%d.%m.%Y' }}{% endif %}{% if f.lugar and f.lugar != '' %} · {{ f.lugar }}{% endif %}</span>
+            <h3>{{ f.evento }}</h3>
+            {%- if f.fotografo and f.fotografo != '' %}<p>Foto: {{ f.fotografo }}</p>{% endif %}
+          </div>
+        </button>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <!-- PROYECTOS (lámina de humo más clara) -->
+    <div class="lamina">
+    <section id="proyectos">
+      <p class="section-num">04 · Proyectos</p>
+      <h2 class="section-title">Proyectos <em>y colectivos</em></h2>
+      <p class="intro-line">Colectivos, publicaciones, talleres y servicios editoriales. Haz clic en cualquier recuadro para ver el detalle.</p>
+      <div class="projects-grid">
+        {%- for p in proyectos %}
+        {%- assign slug = p.slug | default: p.id | split: '/' | last %}
+        <button type="button" class="project-card" data-modal="modal-{{ slug }}">
+          <div>
+            <span class="project-num" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <span class="project-tag">{{ p.categoria }}{% if p.anio and p.anio != '' %} · {{ p.anio }}{% endif %}</span>
+            <h3>{{ p.titulo }}</h3>
+            <p>{{ p.resumen }}</p>
+          </div>
+          <span class="project-open">[+] Abrir registro</span>
+        </button>
+        {%- endfor %}
+      </div>
+    </section>
+    </div>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+      <p class="section-num">05 · Contacto</p>
+      <h2 class="section-title">Escribe <em>al núcleo</em></h2>
+      <div class="contact-container">
+        <div class="contact-info">
+          <p>{{ s.contacto_texto }}</p>
+          <div class="about-meta">
+            <div class="meta-item"><span>CORREO:</span><span><a href="mailto:{{ s.correo }}">{{ s.correo }}</a></span></div>
+            {%- for r in s.redes %}
+            <div class="meta-item"><span>{{ r.nombre | upcase }}:</span><span><a href="{{ r.url }}" target="_blank" rel="noopener">Abrir &#8599;</a></span></div>
+            {%- endfor %}
+            <div class="meta-item"><span>UBICACIÓN:</span><span>{{ s.ubicacion }}</span></div>
+          </div>
+        </div>
+        <form class="contact-form" data-correo="{{ s.correo }}">
+          <div class="form-group">
+            <label for="nombre">Nombre / Colectivo</label>
+            <input type="text" id="nombre" required placeholder="Tu nombre...">
+          </div>
+          <div class="form-group">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" required placeholder="tu@correo.com">
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Mensaje / Propuesta</label>
+            <textarea id="mensaje" rows="5" required placeholder="Escribe tu mensaje..."></textarea>
+          </div>
+          <button type="submit" class="btn-bruto">Enviar Mensaje</button>
+          <p class="form-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- VISOR DE FOTOS (uno solo para toda la galería) -->
+  <div id="visor" class="modal-overlay visor" role="dialog" aria-modal="true" aria-labelledby="visor-evento">
+    <div class="modal-box visor-box">
+      <button type="button" class="close-modal" aria-label="Cerrar">X</button>
+      <figure>
+        <div class="visor-foto"></div>
+        <figcaption>
+          <span class="gallery-tag visor-folio"></span>
+          <h3 id="visor-evento"></h3>
+          <dl class="visor-datos">
+            <div class="meta-item visor-fecha"><dt>FECHA:</dt><dd></dd></div>
+            <div class="meta-item visor-lugar"><dt>LUGAR:</dt><dd></dd></div>
+            <div class="meta-item visor-fotografo"><dt>FOTO:</dt><dd></dd></div>
+          </dl>
+          <p class="visor-contexto"></p>
+        </figcaption>
+      </figure>
+      <div class="visor-nav">
+        <button type="button" class="btn-bruto btn-bruto-alt visor-ant" aria-label="Foto anterior">&larr;</button>
+        <button type="button" class="btn-bruto btn-bruto-alt visor-sig" aria-label="Foto siguiente">&rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETALLE DE PROYECTOS -->
+  {%- for p in proyectos %}
+  {%- assign slug = p.slug | default: p.id | split: '/' | last %}
+  <div id="modal-{{ slug }}" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="t-{{ slug }}">
+    <div class="modal-box">
+      <button type="button" class="close-modal" aria-label="Cerrar">X</button>
+      <span class="project-tag">{{ p.categoria }}{% if p.anio and p.anio != '' %} · {{ p.anio }}{% endif %}{% if p.lugar and p.lugar != '' %} · {{ p.lugar }}{% endif %}</span>
+      <h3 id="t-{{ slug }}">{{ p.titulo }}</h3>
+      <div class="modal-texto">{{ p.content }}</div>
+      {%- if p.enlace and p.enlace != '' %}
+      <a href="{{ p.enlace }}" target="_blank" rel="noopener" class="btn-bruto">Ver más &#8599;</a>
+      {%- else %}
+      <a href="#contacto" class="btn-bruto" data-cerrar>Escribir</a>
+      {%- endif %}
+    </div>
+  </div>
+  {%- endfor %}

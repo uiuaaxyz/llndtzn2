@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+{% include head.html %}
+</head>
+<body{% if page.clase_body %} class="{{ page.clase_body }}"{% endif %}>
+{% include header.html %}
+{{ content }}
+{% include footer.html %}
+  <script src="{{ '/assets/js/tizne.js' | relative_url }}"></script>
+</body>
+</html>

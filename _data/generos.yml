@@ -1,0 +1,11 @@
+# Géneros del Archivo (el orden es el de los botones de filtro)
+- clave: poesia
+  nombre: Poesía
+- clave: cuento
+  nombre: Cuento
+- clave: cronica
+  nombre: Crónica
+- clave: nota
+  nombre: Nota Periodística
+- clave: ensayo
+  nombre: Ensayo Breve

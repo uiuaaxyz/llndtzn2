@@ -1,0 +1,35 @@
+# LLENO DE TIZNE — configuración de Jekyll (GitHub Pages lo construye solo)
+title: Lleno de Tizne
+lang: es
+url: https://uiuaaxyz.github.io
+baseurl: /llndtzn2          # si algún día usas dominio propio, déjalo vacío: ""
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: true          # cada salto de línea cuenta (importante para poemas)
+
+collections:
+  textos:
+    output: true
+    permalink: /textos/:name.html
+  galeria:
+    output: false
+  proyectos:
+    output: false
+
+defaults:
+  - scope:
+      path: ""
+      type: textos
+    values:
+      layout: texto
+
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .pages.yml
+  - GUIA.md
